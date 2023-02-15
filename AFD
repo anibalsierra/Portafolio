@@ -1,0 +1,86 @@
+package com.mycompany.afd;
+
+/**
+ *
+ * @author anibal.sierra
+ */
+public class AFD {
+    
+    //Definición de un AFD
+    
+    //Alfabeto de entrada definido en el programa
+    String alphabet [] = {"0","1"};
+    String q0, q1, q2, q3;
+    //Colección de estados 
+    String states [] = {q0,q1,q2,q3};
+    //Estado Inicial
+    boolean isStartState [] = {true,false,false,false};
+    //Estados de aceptación
+    boolean isFinalState [] = {false,true,false,false};
+    String startState, finalState;
+    String input = "01";
+    String output;    
+    //Definir estados      
+    void emptyMethod(){            
+            q0 = "Ceros pares, Unos pares";
+            q1 = "Ceros pares, Unos impares";
+            q2 = "Ceros impares, Unos pares";
+            q3 = "Ceros impares, Unos impares";            
+    }    
+    //Defininir estado incial y final   
+    void emptyMethod2(){
+        for(int i=0; i<=3; i++){
+            if(isStartState[i]){
+                startState = states[i];
+            }
+            if(isFinalState[i]){
+                finalState = states[i];
+            }
+        }
+    }    
+    //Función de transición
+    String transition(String state, String input){        
+        if(state.equals(q0)){
+            if(input == "0"){
+                return q2;
+            } else{
+                return q1;
+            }
+        }
+        if(state.equals(q1)){
+            if(input == "0"){
+                return q3;
+            } else{
+                return q0;
+            }
+        }
+        if(state.equals(q2)){
+            if(input == "0"){
+                return q0;
+            } else{
+                return q3;
+            }
+        }
+        if(state.equals(q3)){
+            if(input == "0"){
+                return q1;
+            } else{
+                return q2;
+            }
+        }
+        return null;        
+    }
+    void emptyMethod3(){
+        String in;        
+        for(int i = 0; i<input.length();i++){
+            in = String.valueOf(input.charAt(i));
+            
+        }
+    }
+    
+    
+    public static void main(String[] args) {
+        
+            
+    }
+}
