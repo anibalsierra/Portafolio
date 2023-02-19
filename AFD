@@ -6,63 +6,56 @@ package com.mycompany.afd;
  */
 public class AFD {
     
-    //Definición de un AFD
-    
+   //Objeto de lectura
+    Scanner in = new Scanner(System.in);
+    //Definición de un AFD    
     //Alfabeto de entrada definido en el programa
     String alphabet [] = {"0","1"};
     String q0, q1, q2, q3;
     //Colección de estados 
-    String states [] = {q0,q1,q2,q3};
+    String states [];
     //Estado Inicial
-    boolean isStartState [] = {true,false,false,false};
-    //Estados de aceptación
-    boolean isFinalState [] = {false,true,false,false};
-    String startState, finalState;
-    String input = "01";
-    String output;    
+    String startState;    
+    //Estados de aceptación 
+    boolean[] finalStates = {true,true,false,true};           
     //Definir estados      
-    void emptyMethod(){            
+    void definingStates(){            
             q0 = "Ceros pares, Unos pares";
             q1 = "Ceros pares, Unos impares";
             q2 = "Ceros impares, Unos pares";
-            q3 = "Ceros impares, Unos impares";            
-    }    
-    //Defininir estado incial y final   
-    void emptyMethod2(){
-        for(int i=0; i<=3; i++){
-            if(isStartState[i]){
-                startState = states[i];
-            }
-            if(isFinalState[i]){
-                finalState = states[i];
-            }
-        }
-    }    
+            q3 = "Ceros impares, Unos impares";
+            startState = q0;
+            states =  new String[4];
+            states[0] = q0;
+            states[1] = q1;
+            states[2] = q2;
+            states[3] = q3;
+    }       
     //Función de transición
     String transition(String state, String input){        
         if(state.equals(q0)){
-            if(input == "0"){
+            if(input.equals("0")){
                 return q2;
             } else{
                 return q1;
             }
         }
         if(state.equals(q1)){
-            if(input == "0"){
+            if(input.equals("0")){
                 return q3;
             } else{
                 return q0;
             }
         }
         if(state.equals(q2)){
-            if(input == "0"){
+            if(input.equals("0")){
                 return q0;
             } else{
                 return q3;
             }
         }
         if(state.equals(q3)){
-            if(input == "0"){
+            if(input.equals("0")){
                 return q1;
             } else{
                 return q2;
@@ -70,17 +63,69 @@ public class AFD {
         }
         return null;        
     }
-    void emptyMethod3(){
-        String in;        
-        for(int i = 0; i<input.length();i++){
-            in = String.valueOf(input.charAt(i));
-            
+    //Determinar si una cadena pertenece al lenguaje
+    String stringState(String stringInput){
+        String in;
+        String currentState = startState;        
+        for(int i = 0; i<stringInput.length();i++){
+            in = String.valueOf(stringInput.charAt(i));            
+            currentState = transition(currentState,in);            
+        }
+        return currentState;
+    }    
+    int stringStateIndex(String state){                            
+        for(int i = 0; i<states.length; i++){
+            if(state.equals(states[i])){
+                return i;                        
+            }                
+        }
+        return -1;
+    }    
+    void isAFinalState(int index){
+        if(finalStates[index]){
+            System.out.println("La cadena pertenece al lenguaje");
+        } else {
+            System.out.println("La cadena no pertenece al lenguaje");
         }
     }
+    //Lectura de entradas
+    String readIn(){
+        String stringInput;
+        stringInput = in.nextLine();        
+        return stringInput;       
+    }
+    boolean isStringValid(String stringInput){
+        String in;
+        for(int i = 0; i<stringInput.length();i++){
+            in = String.valueOf(stringInput.charAt(i));
+            if(!in.equals(alphabet[0])&&!in.equals(alphabet[1])){
+                System.out.println("Cadena no valida");
+                return false;
+            }            
+        }        
+        return true;
+    }
+    //Menu
+    void menu(){
+        System.out.println("Simular un AFD");
+        boolean continuar = false;
+        definingStates();
+        String in;
+        do{
+            System.out.println("Digite una cadena de ceros y unos");
+            in=readIn();
+            if(isStringValid(in)){
+                System.out.println(stringState(in));                
+                isAFinalState(stringStateIndex(stringState(in)));
+                continuar = false;
+            } else {
+                continuar = true;
+            }            
+        }while(continuar);
+    } 
     
-    
-    public static void main(String[] args) {
-        
-            
+    public static void main(String[] args) {       
+        AFD unAFD = new AFD();
+        unAFD.menu();                
     }
 }
